@@ -1,0 +1,25 @@
+{
+  "name": "eyeos-chat",
+  "version": "0.0.12",
+  "description": "Plugin using external authentication for ejabberd to authenticate with eyeos cards",
+  "main": "eyeos-ejabberd-auth.js",
+  "scripts": {
+    "test": "mocha --ui tdd ./src/test"
+  },
+  "author": "eyeos",
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "eyeos-auth": "*",
+    "eyeos-hooks": "*"
+  },
+  "devDependencies": {
+    "eyeos-gruntfile": "*",
+    "chai": "1.10.0",
+    "sinon": "1.12.2",
+    "mocha": "2.1.0",
+    "grunt": "0.4.5",
+    "grunt-init": "0.3.2",
+    "grunt-shell": "1.1.1",
+    "grunt-mocha-test": "0.12.6"
+  }
+}
