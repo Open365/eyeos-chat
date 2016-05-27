@@ -9,8 +9,7 @@
   "author": "eyeos",
   "license": "AGPL-3.0",
   "dependencies": {
-    "eyeos-auth": "*",
-    "eyeos-hooks": "*"
+    "eyeos-auth": "*"
   },
   "devDependencies": {
     "eyeos-gruntfile": "*",
@@ -20,6 +19,7 @@
     "grunt": "0.4.5",
     "grunt-init": "0.3.2",
     "grunt-shell": "1.1.1",
-    "grunt-mocha-test": "0.12.6"
+    "grunt-mocha-test": "0.12.6",
+    "eyeos-hooks": "*"
   }
 }
