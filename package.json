@@ -1,6 +1,6 @@
 {
   "name": "eyeos-chat",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Plugin using external authentication for ejabberd to authenticate with eyeos cards",
   "main": "eyeos-ejabberd-auth.js",
   "scripts": {
