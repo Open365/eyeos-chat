@@ -1,21 +1,22 @@
-FROM docker-registry.eyeosbcn.com/eyeos-fedora21-node-base
-
-WORKDIR ${InstallationDir}
+FROM docker-registry.eyeosbcn.com/alpine6-node-base
 
 ENV WHATAMI chat
 
-RUN yum install wget -y \
-    && wget -O ejabberd.rpm https://www.process-one.net/downloads/downloads-action.php?file=/ejabberd/16.04/ejabberd-16.04-0.x86_64.rpm \
-    && yum localinstall ejabberd.rpm -y \
-    && yum clean all \
-    && rm ejabberd.rpm \
-    && mkdir -p /var/service
+ENV InstallationDir /var/service/
 
-ENV PATH /opt/ejabberd-16.04/bin:${PATH}
+WORKDIR ${InstallationDir}
 
 COPY . ${InstallationDir}
 
-RUN npm install --verbose && npm install -g eyeos-service-ready-notify-cli && \
-    npm cache clean
+RUN apk update && \
+    /scripts-base/installExtraBuild.sh && \
+    wget https://s3-eu-west-1.amazonaws.com/apk-packages/ejabberd-16.04-r0.apk && \
+    apk add --no-cache bash && \
+    apk add --no-cache --allow-untrusted ejabberd-16.04-r0.apk && \
+    npm install -g --verbose eyeos-service-ready-notify-cli && \
+    npm install --verbose --production && \
+    npm cache clean && \
+    /scripts-base/deleteExtraBuild.sh && \
+    rm -fr /etc/ssl /var/cache/apk/* /tmp/* ejabberd-16.04-r0.apk
 
 CMD eyeos-run-server --serf ${InstallationDir}/start.sh
