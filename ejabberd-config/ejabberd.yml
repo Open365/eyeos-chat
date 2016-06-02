@@ -1,5 +1,5 @@
 ###
-###'           ejabberd configuration file
+###'              ejabberd configuration file
 ###
 ###
 
@@ -70,7 +70,7 @@ log_rate_limit: 100
 ## accounts.
 ##
 ## watchdog_admins:
-##   - "admin@b0b55bbbe920"
+##   - "bob@example.com"
 
 ###.  ===============
 ###'  NODE PARAMETERS
@@ -114,16 +114,23 @@ listen:
   - 
     port: 5222
     module: ejabberd_c2s
-    certfile: "/opt/ejabberd-16.04/conf/server.pem"
-    starttls: true
+    ##
+    ## If TLS is compiled in and you installed a SSL
+    ## certificate, specify the full path to the
+    ## file and uncomment these lines:
+    ##
+    ## certfile: "/path/to/ssl.pem"
+    ## starttls: true
+    ##
     ## To enforce TLS encryption for client connections,
     ## use this instead of the "starttls" option:
+    ##
     ## starttls_required: true
     ##
     ## Custom OpenSSL options
     ##
-    protocol_options:
-      - "no_sslv3"
+    ## protocol_options:
+    ##   - "no_sslv3"
     ##   - "no_tlsv1"
     max_stanza_size: 65536
     shaper: c2s_shaper
@@ -131,8 +138,6 @@ listen:
   - 
     port: 5269
     module: ejabberd_s2s_in
-    max_stanza_size: 131072
-    shaper: s2s_shaper
   ##
   ## ejabberd_service: Interact with external components (transports, ...)
   ##
@@ -162,12 +167,7 @@ listen:
   ## - 
   ##   port: 4560
   ##   module: ejabberd_xmlrpc
-  ##   maxsessions: 10
-  ##   timeout: 5000
-  ##   access_commands:
-  ##     admin:
-  ##       commands: all
-  ##       options: []
+  ##   access_commands: {}
   - 
     port: 5280
     module: ejabberd_http
@@ -177,7 +177,7 @@ listen:
     web_admin: true
     http_bind: true
     ## register: true
-    captcha: false
+    captcha: true
 
 ###.  ==================
 ###'  S2S GLOBAL OPTIONS
@@ -192,7 +192,7 @@ listen:
 ##
 ## s2s_certfile: Specify a certificate file.
 ##
-## s2s_certfile: "/opt/ejabberd-16.04/conf/server.pem"
+## s2s_certfile: "/path/to/ssl.pem"
 
 ## Custom OpenSSL options
 ##
@@ -205,9 +205,9 @@ listen:
 ##
 ## host_config:
 ##   "example.org":
-##     domain_certfile: "/opt/ejabberd-16.04/conf/example_org.pem"
+##     domain_certfile: "/path/to/example_org.pem"
 ##   "example.com":
-##     domain_certfile: "/opt/ejabberd-16.04/conf/example_com.pem"
+##     domain_certfile: "/path/to/example_com.pem"
 
 ##
 ## S2S whitelist or blacklist
@@ -254,10 +254,10 @@ auth_method: external
 extauth_program: "/var/service/src/eyeos-ejabberd-auth.js"
 
 ##
-## Authentication using ODBC
+## Authentication using SQL
 ## Remember to setup a database in the next section.
 ##
-## auth_method: odbc
+## auth_method: sql
 
 ##
 ## Authentication using PAM
@@ -330,26 +330,26 @@ extauth_program: "/var/service/src/eyeos-ejabberd-auth.js"
 ##
 ## MySQL server:
 ##
-## odbc_type: mysql
-## odbc_server: "server"
-## odbc_database: "database"
-## odbc_username: "username"
-## odbc_password: "password"
+## sql_type: mysql
+## sql_server: "server"
+## sql_database: "database"
+## sql_username: "username"
+## sql_password: "password"
 ##
 ## If you want to specify the port:
-## odbc_port: 1234
+## sql_port: 1234
 
 ##
 ## PostgreSQL server:
 ##
-## odbc_type: pgsql
-## odbc_server: "server"
-## odbc_database: "database"
-## odbc_username: "username"
-## odbc_password: "password"
+## sql_type: pgsql
+## sql_server: "server"
+## sql_database: "database"
+## sql_username: "username"
+## sql_password: "password"
 ##
 ## If you want to specify the port:
-## odbc_port: 1234
+## sql_port: 1234
 ##
 ## If you use PostgreSQL, have a large database, and need a
 ## faster but inexact replacement for "select count(*) from users"
@@ -359,25 +359,25 @@ extauth_program: "/var/service/src/eyeos-ejabberd-auth.js"
 ##
 ## SQLite:
 ##
-## odbc_type: sqlite
-## odbc_database: "/opt/ejabberd-16.04/database/ejabberd.db"
+## sql_type: sqlite
+## sql_database: "/path/to/database.db"
 
 ##
 ## ODBC compatible or MSSQL server:
 ##
-## odbc_type: odbc
-## odbc_server: "DSN=ejabberd;UID=ejabberd;PWD=ejabberd"
+## sql_type: odbc
+## sql_server: "DSN=ejabberd;UID=ejabberd;PWD=ejabberd"
 
 ##
 ## Number of connections to open to the database for each virtual host
 ##
-## odbc_pool_size: 10
+## sql_pool_size: 10
 
 ##
 ## Interval to make a dummy SQL request to keep the connections to the
 ## database alive. Specify in seconds: for example 28800 means 8 hours
 ##
-## odbc_keepalive_interval: undefined
+## sql_keepalive_interval: undefined
 
 ###.  ===============
 ###'  TRAFFIC SHAPERS
@@ -409,7 +409,6 @@ acl:
   admin:
     user:
       - "admin": "localhost"
-
   ##
   ## Blocked users
   ##
@@ -552,12 +551,12 @@ language: "en"
 ##
 ## Full path to a script that generates the image.
 ##
-## captcha_cmd: "/opt/ejabberd-16.04/lib/ejabberd-16.04/priv/bin/captcha.sh"
+## captcha_cmd: "/lib/ejabberd/priv/bin/captcha.sh"
 
 ##
 ## Host for the URL and port where ejabberd listens for CAPTCHA requests.
 ##
-## captcha_host: "b0b55bbbe920:5280"
+## captcha_host: "example.org:5280"
 
 ##
 ## Limit CAPTCHA calls per minute for JID/IP to avoid DoS.
@@ -572,7 +571,7 @@ language: "en"
 ##
 modules: 
   mod_adhoc: {}
-  mod_admin_extra: {}
+  ## mod_admin_extra: {}
   mod_announce: # recommends mod_adhoc
     access: announce
   mod_blocking: {} # requires mod_privacy
@@ -582,11 +581,11 @@ modules:
   mod_configure: {} # requires mod_adhoc
   mod_disco: {}
   ## mod_echo: {}
-  ## mod_irc: {}
+  mod_irc: {}
   mod_http_bind: {}
   ## mod_http_fileserver:
   ##   docroot: "/var/www"
-  ##   accesslog: "/opt/ejabberd-16.04/logs/access.log"
+  ##   accesslog: "/var/log/ejabberd/access.log"
   mod_last: {}
   mod_muc: 
     ## host: "conference.@HOST@"
@@ -594,7 +593,6 @@ modules:
     access_create: muc_create
     access_persistent: muc_create
     access_admin: muc_admin
-  mod_muc_admin: {}
   ## mod_muc_log: {}
   ## mod_multicast: {}
   mod_offline: 
@@ -617,50 +615,45 @@ modules:
       - "flat"
       - "hometree"
       - "pep" # pep requires mod_caps
-  mod_register: 
+  ## mod_register:
     ##
     ## Protect In-Band account registrations with CAPTCHA.
     ##
-    ## captcha_protected: true
-
+    ##   captcha_protected: true
     ##
     ## Set the minimum informational entropy for passwords.
     ##
-    ## password_strength: 32
-
+    ##   password_strength: 32
     ##
     ## After successful registration, the user receives
     ## a message with this subject and body.
     ##
-    welcome_message: 
-      subject: "Welcome!"
-      body: |-
-        Hi.
-        Welcome to this XMPP server.
-
+    ##   welcome_message:
+    ##     subject: "Welcome!"
+    ##     body: |-
+    ##       Hi.
+    ##       Welcome to this XMPP server.
     ##
     ## When a user registers, send a notification to
     ## these XMPP accounts.
     ##
-    ## registration_watchers:
-    ##   - "admin1@example.org"
-
+    ##   registration_watchers:
+    ##     - "admin1@example.org"
     ##
     ## Only clients in the server machine can register accounts
     ##
-    ip_access: trusted_network
-
+    ##   ip_access: trusted_network
     ##
     ## Local c2s or remote s2s users cannot register accounts
     ##
-    ## access_from: deny
-
-    access: register
+    ##   access_from: deny
+    ##   access: register
   mod_roster: {}
   mod_shared_roster: {}
-  ## mod_stats: {}
-  ## mod_time: {}
-  mod_vcard: {}
+  mod_stats: {}
+  mod_time: {}
+  mod_vcard:
+    search: false
   mod_version: {}
 
 ##

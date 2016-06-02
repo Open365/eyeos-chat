@@ -19,6 +19,11 @@
 */
 
 require('./lib/pipe');
+var oldStdoutWrite = process.stdout.write;
+var oldStderrWrite = process.stderr.write;
+process.stdout.write = function(){}; //silence everything
+process.stderr.write = function(){};
+
 var settings = require("./settings");
 var EyeosAuth = require('eyeos-auth');
 var eyeosAuth = new EyeosAuth();
@@ -67,9 +72,11 @@ process.stdin.on('data', function(chunk) {
 });
 
 function fail() {
+    process.stdout.write = oldStdoutWrite;
     process.stdout.write(new Buffer([0, 2, 0, 0]));
 }
 
 function ok() {
+    process.stdout.write = oldStdoutWrite;
     process.stdout.write(new Buffer([0, 2, 0, 1]));
 }
