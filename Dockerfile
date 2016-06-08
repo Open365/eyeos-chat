@@ -6,7 +6,6 @@ ENV InstallationDir /var/service/
 
 WORKDIR ${InstallationDir}
 
-COPY alpine-*.list /var/service/
 COPY . ${InstallationDir}
 
 RUN apk update && \
