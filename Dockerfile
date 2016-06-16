@@ -17,4 +17,4 @@ RUN /scripts-base/buildDependencies.sh --production --install && \
     /scripts-base/buildDependencies.sh --production --purgue && \
     rm -fr /etc/ssl /var/cache/apk/* /tmp/* ejabberd-16.04-r0.apk
 
-CMD eyeos-run-server --serf ${InstallationDir}/start.sh
+CMD ["eyeos-run-server", "--serf", "./start.sh"]
